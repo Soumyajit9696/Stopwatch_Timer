@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer by Soumyajit Das</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+    <style>
+        
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-image: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+        }
+
+#timer-box {
+    text-align: center;
+    background-color: #fff;     
+    text-align: center;
+    padding: 69px;
+    background-color: #fff;
+    border-radius: 10%;
+    width: 20%;
+    height: 40%;
+    font-weight: bolder;
+    background-image: linear-gradient(135deg, #ebff52,#34ffee);
+}
+#timer {
+    font-size: 2em;
+    color: #333;
+    font-family: 'Roboto mono',monospace;
+    font-size: 2em;
+    padding-bottom: 10px;
+}
+#timer-box:hover{
+        text-align: center;
+        border-radius: 10%;
+        width: 20%;
+        height: 40%;
+        padding: 69px;
+        transition: 250ms;
+        box-shadow: 0 14px 28px rgb(255, 185, 185), 0 10px 10px rgb(255, 255, 255) ;
+}
+
+#timer {
+    font-size: 50px;
+    color: #333;
+    font-family: 'Roboto mono',monospace;
+    padding-bottom: 10px;
+}
+
+input {
+    margin: 10px;
+    padding: 8px;
+    font-size: 1em;
+    text-align:center;
+    margin: 10px;
+    padding: 8px;
+    font-size: 1em;
+    text-align: center;
+    width: 30%;
+    border-radius: 10px;
+    border: 2px solid red;
+    
+}
+label{
+    font-family:'Roboto mono',monospace; 
+    font-size: 28px;
+    font-weight:bolder;
+}
+
+/* CSS */
+button{
+    background-color: #fbe6c2;
+    border-radius: 8px;
+    box-shadow: rgba(187, 156, 44, 0.33) 0 -25px 18px -14px inset,rgba(187, 106, 44, 0.15) 0 1px 2px,rgba(255, 91, 73, 0.15) 0 2px 4px,rgba(187, 53, 44, 0.15) 0 4px 8px,rgba(187, 96, 44, 0.15) 0 8px 16px,rgba(187, 127, 44, 0.15) 0 16px 32px;
+    color: rgb(231, 131, 0);
+    cursor: pointer;
+    display: inline-block;
+    font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+    padding: 7px 22px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 250ms;
+    border: 0;
+    font-size: 16px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+button:hover {
+    box-shadow: rgba(44,187,99,.35) 0 -25px 18px -14px inset,rgba(44,187,99,.25) 0 1px 2px,rgba(44,187,99,.25) 0 2px 4px,rgba(44,187,99,.25) 0 4px 8px,rgba(44,187,99,.25) 0 8px 16px,rgba(44,187,99,.25) 0 16px 32px;
+    transform: scale(1.05) rotate(-1deg);
+}
+
+</style>
+</head>
+
+<body>
+    
+    <div class="custom-btn-container">
+        <div class="btn">+</div>
+
+        <div class="btn-options">
+            <a href="stop.html">StopWatch</a>
+            <a href="timer.html">Timer</a>
+            <a href="#">Thanks!</a>
+        </div>
+    </div>
+
+    <div id="timer-box">
+        <div>
+            <label for="hours">⏰Hours:</label>
+            <input type="number" id="hours" value="0" min="0">
+        </div>
+        <div>
+            <label for="minutes">Minutes:</label>
+            <input type="number" id="minutes" value="0" min="0" max="59">
+        </div>
+        <div>
+            <label for="seconds">Seconds:</label>
+            <input type="number" id="seconds" value="0" min="0" max="59">
+        </div>
+        <div id="timer">00:00:00</div>
+        <button onclick="startTimer()">Start</button>
+        <button onclick="stopTimer()">Stop</button>
+        <button onclick="resetTimer()">Reset</button>
+    </div>
+    <h1>Click on the '+' Icon to switch between timer and Stopwatch.</h1>
+    <script>
+        let timer;
+        let seconds = 0;
+        let minutes = 0;
+        let hours = 0;
+
+        function startTimer() {
+            hours = parseInt(document.getElementById("hours").value) || 0;
+            minutes = parseInt(document.getElementById("minutes").value) || 0;
+            seconds = parseInt(document.getElementById("seconds").value) || 0;
+
+            timer = setInterval(updateTimer, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timer);
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            seconds = 0;
+            minutes = 0;
+            hours = 0;
+            updateDisplay();
+        }
+
+        function updateTimer() {
+            seconds--;
+            if (seconds < 0) {
+                seconds = 59;
+                minutes--;
+                if (minutes < 0) {
+                    minutes = 59;
+                    hours--;
+                    if (hours < 0) {
+                        stopTimer();
+                        resetTimer();
+                        return;
+                    }
+                }
+            }
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            const formattedTime = pad(hours) + ":" + pad(minutes) + ":" + pad(seconds);
+            document.getElementById("timer").innerText = formattedTime;
+        }
+
+        function pad(value) {
+            return value < 10 ? "0" + value : value;
+        }
+    </script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous"></script>
+
+<script src="main.js"></script>
+
+</body>
+
+</html>
